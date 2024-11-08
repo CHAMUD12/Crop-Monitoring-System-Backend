@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/v1/fields")
 @RequiredArgsConstructor
@@ -73,5 +75,10 @@ public class FieldController {
             e.printStackTrace(); // Log the error
             return new ResponseEntity<>(new FieldErrorResponse("error", "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "allFields", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<FieldDTO> getAllFields() {
+        return fieldService.getAllFields();
     }
 }
