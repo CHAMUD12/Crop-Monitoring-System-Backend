@@ -5,6 +5,7 @@ import org.example.cropmonitoringsystembackend.dao.FieldDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.service.FieldService;
+import org.example.cropmonitoringsystembackend.util.Mapping;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
