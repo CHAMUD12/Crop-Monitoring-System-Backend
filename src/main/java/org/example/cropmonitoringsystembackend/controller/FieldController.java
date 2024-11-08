@@ -6,6 +6,7 @@ import org.example.cropmonitoringsystembackend.customObj.FieldErrorResponse;
 import org.example.cropmonitoringsystembackend.customObj.FieldResponse;
 import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.FieldNotFoundException;
 import org.example.cropmonitoringsystembackend.service.FieldService;
 import org.example.cropmonitoringsystembackend.util.AppUtil;
 import org.springframework.http.HttpStatus;
@@ -115,6 +116,18 @@ public class FieldController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping(value = "/{code}")
+    public ResponseEntity<Void> deleteSelectedField(@PathVariable("code") String code) {
+        try {
+            fieldService.deleteField(code);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (FieldNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
