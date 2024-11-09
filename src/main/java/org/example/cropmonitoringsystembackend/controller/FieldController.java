@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/v1/fields")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:5501")
 public class FieldController {
     private final FieldService fieldService;
 
