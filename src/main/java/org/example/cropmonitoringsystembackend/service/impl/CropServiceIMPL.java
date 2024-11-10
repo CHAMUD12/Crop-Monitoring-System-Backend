@@ -6,6 +6,7 @@ import org.example.cropmonitoringsystembackend.dao.FieldDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
 import org.example.cropmonitoringsystembackend.entity.impl.Crop;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
+import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.service.CropService;
 import org.example.cropmonitoringsystembackend.util.Mapping;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -51,7 +53,12 @@ public class CropServiceIMPL implements CropService {
 
     @Override
     public void deleteCrop(String cropCode) {
-
+        Optional<Crop> selectedCrop = cropDAO.findById(cropCode);
+        if(!selectedCrop.isPresent()){
+            throw new CropNotFoundException(cropCode);
+        } else {
+            cropDAO.deleteById(cropCode);
+        }
     }
 
     @Override

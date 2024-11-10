@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.customObj.FieldErrorResponse;
 import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
+import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.service.CropService;
 import org.example.cropmonitoringsystembackend.util.AppUtil;
@@ -78,6 +79,18 @@ public class CropController {
             @RequestParam(value = "cropCommonName", required = false) String cropCommonName) {
         List<CropDTO> crops = cropService.searchCrops(cropCode, cropCommonName);
         return new ResponseEntity<>(crops, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{code}")
+    public ResponseEntity<Void> deleteSelectedCrop(@PathVariable("code") String code) {
+        try {
+            cropService.deleteCrop(code);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (CropNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
