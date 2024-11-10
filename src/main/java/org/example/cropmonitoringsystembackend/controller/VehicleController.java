@@ -61,4 +61,21 @@ public class VehicleController {
         List<VehicleDTO> crops = vehicleService.searchVehicles(vehicleCode, vehicleCategory);
         return new ResponseEntity<>(crops, HttpStatus.OK);
     }
+
+
+    @PatchMapping(value = "/{vehicleCode}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateSelectedVehicle(
+            @PathVariable("vehicleCode") String vehicleCode,
+            @RequestBody VehicleDTO vehicleDTO
+    ) {
+        try {
+            vehicleService.updateVehicle(vehicleCode, vehicleDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (VehicleNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
