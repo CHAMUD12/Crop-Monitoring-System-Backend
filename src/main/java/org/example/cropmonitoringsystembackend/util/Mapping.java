@@ -1,7 +1,9 @@
 package org.example.cropmonitoringsystembackend.util;
 
+import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
 import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
 import org.example.cropmonitoringsystembackend.dto.impl.VehicleDTO;
+import org.example.cropmonitoringsystembackend.entity.impl.Crop;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.entity.impl.Vehicle;
 import org.modelmapper.ModelMapper;
@@ -41,5 +43,16 @@ public class Mapping {
 
     public List<VehicleDTO> convertToVehicleListDTO(List<Vehicle> vehicles) {
         return modelMapper.map(vehicles, new TypeToken<List<VehicleDTO>>() {}.getType());
+    }
+
+    //Crop mappings
+    public CropDTO convertToCropDTO(Crop crop) {
+        return modelMapper.map(crop, CropDTO.class);
+    }
+    public Crop convertToCrop(CropDTO cropDTO) {
+        return modelMapper.map(cropDTO, Crop.class);
+    }
+    public List<CropDTO> convertToCropListDTO(List<Crop> crops) {
+        return modelMapper.map(crops, new TypeToken<List<CropDTO>>() {}.getType());
     }
 }

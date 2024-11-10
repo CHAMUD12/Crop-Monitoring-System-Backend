@@ -55,7 +55,6 @@ public class VehicleServiceIMPL implements VehicleService {
         Vehicle existingVehicle = vehicleDAO.findById(vehicleCode)
                 .orElseThrow(() -> new VehicleNotFoundException("Vehicle not found with code: " + vehicleCode));
 
-        // Update fields conditionally
         if (vehicleDTO.getLicensePlateNumber() != null) {
             existingVehicle.setLicensePlateNumber(vehicleDTO.getLicensePlateNumber());
         }
@@ -73,6 +72,5 @@ public class VehicleServiceIMPL implements VehicleService {
         }
 
         vehicleDAO.save(existingVehicle);
-
     }
 }
