@@ -6,6 +6,7 @@ import org.example.cropmonitoringsystembackend.dto.impl.VehicleDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
 import org.example.cropmonitoringsystembackend.service.VehicleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://127.0.0.1:5501")
 public class VehicleController {
+    @Autowired
     private final VehicleService vehicleService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -50,5 +52,13 @@ public class VehicleController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<VehicleDTO>> searchVehicles(
+            @RequestParam(value = "vehicleCode", required = false) String vehicleCode,
+            @RequestParam(value = "vehicleCategory", required = false) String vehicleCategory) {
+        List<VehicleDTO> crops = vehicleService.searchVehicles(vehicleCode, vehicleCategory);
+        return new ResponseEntity<>(crops, HttpStatus.OK);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -36,8 +37,9 @@ public class VehicleServiceIMPL implements VehicleService {
     }
 
     @Override
-    public VehicleDTO getSelectedVehicle(String vehicleCode) {
-        return null;
+    public List<VehicleDTO> searchVehicles(String vehicleCode, String vehicleCategory) {
+        List<Vehicle> vehicles = vehicleDAO.findByVehicleCodeOrVehicleCategory(vehicleCode, vehicleCategory);
+        return mapping.convertToVehicleListDTO(vehicles);
     }
 
     @Override
