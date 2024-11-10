@@ -5,6 +5,7 @@ import org.example.cropmonitoringsystembackend.dao.VehicleDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.VehicleDTO;
 import org.example.cropmonitoringsystembackend.entity.impl.Vehicle;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
 import org.example.cropmonitoringsystembackend.service.VehicleService;
 import org.example.cropmonitoringsystembackend.util.Mapping;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,10 @@ public class VehicleServiceIMPL implements VehicleService {
 
     @Override
     public void deleteVehicle(String vehicleCode) {
-
+        if (!vehicleDAO.existsById(vehicleCode)) {
+            throw new VehicleNotFoundException("Vehicle not found with code: " + vehicleCode);
+        }
+        vehicleDAO.deleteById(vehicleCode);
     }
 
     @Override

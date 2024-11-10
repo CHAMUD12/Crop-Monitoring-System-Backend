@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.dto.impl.VehicleDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
 import org.example.cropmonitoringsystembackend.service.VehicleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,5 +37,18 @@ public class VehicleController {
     @GetMapping(value = "allVehicles", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VehicleDTO> getAllVehicles() {
         return vehicleService.getAllVehicles();
+    }
+
+    @DeleteMapping(value = "/{code}")
+    public ResponseEntity<Void> deleteSelectedVehicle(@PathVariable("code") String code) {
+        try {
+            vehicleService.deleteVehicle(code);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (VehicleNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
