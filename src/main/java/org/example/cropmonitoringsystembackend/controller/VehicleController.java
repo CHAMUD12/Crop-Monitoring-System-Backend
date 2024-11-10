@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/vehicles")
@@ -30,5 +31,10 @@ public class VehicleController {
             e.printStackTrace();
             return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "allVehicles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<VehicleDTO> getAllVehicles() {
+        return vehicleService.getAllVehicles();
     }
 }
