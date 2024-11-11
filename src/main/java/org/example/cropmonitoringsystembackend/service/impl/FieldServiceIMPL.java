@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.customObj.FieldErrorResponse;
 import org.example.cropmonitoringsystembackend.customObj.FieldResponse;
 import org.example.cropmonitoringsystembackend.dao.FieldDAO;
+import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
 import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
+import org.example.cropmonitoringsystembackend.entity.impl.Crop;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.exception.FieldNotFoundException;
@@ -42,13 +44,9 @@ public class FieldServiceIMPL implements FieldService {
     }
 
     @Override
-    public FieldResponse getSelectedField(String fieldCode) {
-        if (fieldDAO.existsById(fieldCode)) {
-            Field fields = fieldDAO.getReferenceById(fieldCode);
-            return mapping.convertToFieldDTO(fields);
-        } else {
-            return new FieldErrorResponse(0, "Field not found");
-        }
+    public List<FieldDTO> getSelectedField(String searchTerm) {
+        List<Field> fields = fieldDAO.findByFieldCodeOrFieldName(searchTerm, searchTerm);
+        return mapping.convertToFieldListDTO(fields);
     }
 
     @Override

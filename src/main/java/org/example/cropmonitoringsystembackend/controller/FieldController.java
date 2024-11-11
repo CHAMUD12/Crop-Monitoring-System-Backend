@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.customObj.FieldErrorResponse;
 import org.example.cropmonitoringsystembackend.customObj.FieldResponse;
+import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
 import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.exception.FieldNotFoundException;
@@ -25,19 +26,11 @@ public class FieldController {
     private final FieldService fieldService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FieldErrorResponse> saveField(
-            @RequestParam("fieldCode") String fieldCode,
-            @RequestParam("fieldName") String fieldName,
-            @RequestParam("fieldLocation") String fieldLocation,
-            @RequestParam("extentSize") Double extentSize,
-            @RequestParam("fieldImage1") MultipartFile fieldImage1,
-            @RequestParam("fieldImage2") MultipartFile fieldImage2,
-            HttpServletRequest request // Add this to log the request content type
+    public ResponseEntity<FieldErrorResponse> saveField(@RequestParam("fieldCode") String fieldCode, @RequestParam("fieldName") String fieldName, @RequestParam("fieldLocation") String fieldLocation, @RequestParam("extentSize") Double extentSize, @RequestParam("fieldImage1") MultipartFile fieldImage1, @RequestParam("fieldImage2") MultipartFile fieldImage2, HttpServletRequest request // Add this to log the request content type
 
     ) {
         System.out.println("Content-Type: " + request.getContentType());
-        request.getHeaderNames().asIterator().forEachRemaining(header ->
-                System.out.println(header + ": " + request.getHeader(header)));
+        request.getHeaderNames().asIterator().forEachRemaining(header -> System.out.println(header + ": " + request.getHeader(header)));
 
         try {
             // Log incoming data
@@ -85,20 +78,14 @@ public class FieldController {
         return fieldService.getAllFields();
     }
 
-    @GetMapping(value = "/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public FieldResponse getSelectedField(@PathVariable("code") String code) {
-        return fieldService.getSelectedField(code);
+    @GetMapping()
+    public ResponseEntity<List<FieldDTO>> getSelectedField(@RequestParam("searchTerm") String searchTerm) {
+        List<FieldDTO> fields = fieldService.getSelectedField(searchTerm);
+        return new ResponseEntity<>(fields, HttpStatus.OK);
     }
 
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/{fieldCode}")
-    public ResponseEntity<Void> updateSelectedField(
-            @PathVariable("fieldCode") String fieldCode,
-            @RequestParam(value = "fieldName", required = false) String fieldName,
-            @RequestParam(value = "fieldLocation", required = false) String fieldLocation,
-            @RequestParam(value = "extentSize", required = false) Double extentSize,
-            @RequestParam(value = "fieldImage1", required = false) MultipartFile fieldImage1,
-            @RequestParam(value = "fieldImage2", required = false) MultipartFile fieldImage2
-    ) {
+    public ResponseEntity<Void> updateSelectedField(@PathVariable("fieldCode") String fieldCode, @RequestParam(value = "fieldName", required = false) String fieldName, @RequestParam(value = "fieldLocation", required = false) String fieldLocation, @RequestParam(value = "extentSize", required = false) Double extentSize, @RequestParam(value = "fieldImage1", required = false) MultipartFile fieldImage1, @RequestParam(value = "fieldImage2", required = false) MultipartFile fieldImage2) {
         try {
             FieldDTO fieldDTO = new FieldDTO();
 
