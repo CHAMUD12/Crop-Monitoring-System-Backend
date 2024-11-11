@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface VehicleDAO extends JpaRepository<Vehicle, String> {
-    List<Vehicle> findByVehicleCodeOrVehicleCategory(String vehicleCode, String vehicleCategory);
+    List<Vehicle> findByVehicleCodeOrLicensePlateNumber(String vehicleCode, String licensePlateNumber);
 }
