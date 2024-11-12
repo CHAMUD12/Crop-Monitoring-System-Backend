@@ -38,4 +38,10 @@ public class EquipmentController {
     public List<EquipmentDTO> getAllEquipment() {
         return equipmentService.getAllEquipment();
     }
+
+    @GetMapping()
+    public ResponseEntity<List<EquipmentDTO>> searchEquipments(@RequestParam(value = "searchTerm", required = false) String searchTerm) {
+        List<EquipmentDTO> equipments = equipmentService.searchEquipment(searchTerm);
+        return new ResponseEntity<>(equipments, HttpStatus.OK);
+    }
 }
