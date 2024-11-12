@@ -2,6 +2,7 @@ package org.example.cropmonitoringsystembackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.dto.impl.EquipmentDTO;
+import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.service.EquipmentService;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,17 @@ public class EquipmentController {
     public ResponseEntity<List<EquipmentDTO>> searchEquipments(@RequestParam(value = "searchTerm", required = false) String searchTerm) {
         List<EquipmentDTO> equipments = equipmentService.searchEquipment(searchTerm);
         return new ResponseEntity<>(equipments, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteSelectedCrop(@PathVariable("id") String id) {
+        try {
+            equipmentService.deleteEquipment(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (CropNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

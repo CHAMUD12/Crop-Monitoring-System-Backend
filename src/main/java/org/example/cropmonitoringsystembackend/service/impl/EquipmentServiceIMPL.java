@@ -5,16 +5,20 @@ import org.example.cropmonitoringsystembackend.dao.EquipmentDAO;
 import org.example.cropmonitoringsystembackend.dao.FieldDAO;
 import org.example.cropmonitoringsystembackend.dao.StaffDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.EquipmentDTO;
+import org.example.cropmonitoringsystembackend.entity.impl.Crop;
 import org.example.cropmonitoringsystembackend.entity.impl.Equipment;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.entity.impl.Staff;
+import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
 import org.example.cropmonitoringsystembackend.service.EquipmentService;
 import org.example.cropmonitoringsystembackend.util.Mapping;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,8 +57,13 @@ public class EquipmentServiceIMPL implements EquipmentService {
     }
 
     @Override
-    public void deleteEquipment(String id) {
-
+    public void deleteEquipment(String equipmentId) {
+        Optional<Equipment> selectedEquipment = equipmentDAO.findById(equipmentId);
+        if(!selectedEquipment.isPresent()){
+            throw new CropNotFoundException(equipmentId);
+        } else {
+            equipmentDAO.deleteById(equipmentId);
+        }
     }
 
     @Override
