@@ -2,13 +2,14 @@ package org.example.cropmonitoringsystembackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.dto.impl.EquipmentDTO;
-import org.example.cropmonitoringsystembackend.dto.impl.StaffDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.service.EquipmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/equipment")
@@ -31,5 +32,10 @@ public class EquipmentController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+    }
+
+    @GetMapping(value = "allEquipment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<EquipmentDTO> getAllEquipment() {
+        return equipmentService.getAllEquipment();
     }
 }

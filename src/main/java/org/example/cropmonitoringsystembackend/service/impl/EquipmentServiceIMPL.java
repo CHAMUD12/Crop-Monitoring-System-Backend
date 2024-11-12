@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.dao.EquipmentDAO;
 import org.example.cropmonitoringsystembackend.dao.FieldDAO;
 import org.example.cropmonitoringsystembackend.dao.StaffDAO;
-import org.example.cropmonitoringsystembackend.dao.VehicleDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.EquipmentDTO;
 import org.example.cropmonitoringsystembackend.entity.impl.Equipment;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.entity.impl.Staff;
-import org.example.cropmonitoringsystembackend.entity.impl.Vehicle;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
 import org.example.cropmonitoringsystembackend.service.EquipmentService;
 import org.example.cropmonitoringsystembackend.util.Mapping;
@@ -50,7 +48,8 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     @Override
     public List<EquipmentDTO> getAllEquipment() {
-        return List.of();
+        List<Equipment> getAllEquipment = equipmentDAO.findAll();
+        return mapping.convertToEquipmentListDTO(getAllEquipment);
     }
 
     @Override
