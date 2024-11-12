@@ -1,13 +1,7 @@
 package org.example.cropmonitoringsystembackend.util;
 
-import org.example.cropmonitoringsystembackend.dto.impl.CropDTO;
-import org.example.cropmonitoringsystembackend.dto.impl.FieldDTO;
-import org.example.cropmonitoringsystembackend.dto.impl.StaffDTO;
-import org.example.cropmonitoringsystembackend.dto.impl.VehicleDTO;
-import org.example.cropmonitoringsystembackend.entity.impl.Crop;
-import org.example.cropmonitoringsystembackend.entity.impl.Field;
-import org.example.cropmonitoringsystembackend.entity.impl.Staff;
-import org.example.cropmonitoringsystembackend.entity.impl.Vehicle;
+import org.example.cropmonitoringsystembackend.dto.impl.*;
+import org.example.cropmonitoringsystembackend.entity.impl.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +65,18 @@ public class Mapping {
 
     public List<StaffDTO> convertToStaffListDTO(List<Staff> staff) {
         return modelMapper.map(staff, new TypeToken<List<StaffDTO>>() {}.getType());
+    }
+
+    //Equipment mapping
+    public EquipmentDTO convertToEquipmentDTO(Equipment equipment) {
+        return modelMapper.map(equipment, EquipmentDTO.class);
+    }
+
+    public Equipment convertToEquipment(EquipmentDTO equipmentDTO) {
+        return modelMapper.map(equipmentDTO, Equipment.class);
+    }
+
+    public List<EquipmentDTO> convertToEquipmentListDTO(List<Equipment> equipments) {
+        return modelMapper.map(equipments, new TypeToken<List<EquipmentDTO>>() {}.getType());
     }
 }
