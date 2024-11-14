@@ -5,13 +5,10 @@ import org.example.cropmonitoringsystembackend.dao.EquipmentDAO;
 import org.example.cropmonitoringsystembackend.dao.FieldDAO;
 import org.example.cropmonitoringsystembackend.dao.StaffDAO;
 import org.example.cropmonitoringsystembackend.dto.impl.EquipmentDTO;
-import org.example.cropmonitoringsystembackend.entity.impl.Crop;
 import org.example.cropmonitoringsystembackend.entity.impl.Equipment;
 import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.entity.impl.Staff;
-import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
-import org.example.cropmonitoringsystembackend.exception.DataPersistException;
-import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
+import org.example.cropmonitoringsystembackend.exception.*;
 import org.example.cropmonitoringsystembackend.service.EquipmentService;
 import org.example.cropmonitoringsystembackend.util.Mapping;
 import org.springframework.stereotype.Service;
@@ -59,7 +56,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
     @Override
     public void deleteEquipment(String equipmentId) {
         Optional<Equipment> selectedEquipment = equipmentDAO.findById(equipmentId);
-        if(!selectedEquipment.isPresent()){
+        if (!selectedEquipment.isPresent()) {
             throw new CropNotFoundException(equipmentId);
         } else {
             equipmentDAO.deleteById(equipmentId);
@@ -67,8 +64,31 @@ public class EquipmentServiceIMPL implements EquipmentService {
     }
 
     @Override
-    public void updateEquipment(String id, EquipmentDTO equipmentDTO) {
+    public void updateEquipment(String equipmentId, EquipmentDTO equipmentDTO) {
+        Equipment existingEquipment = equipmentDAO.findById(equipmentId)
+                .orElseThrow(() -> new EquipmentNotFoundException("Equipment not found with ID: " + equipmentId));
 
+        if (equipmentDTO.getEquipmentName() != null) {
+            existingEquipment.setEquipmentName(equipmentDTO.getEquipmentName());
+        }
+        if (equipmentDTO.getEquipmentType() != null) {
+            existingEquipment.setEquipmentType(equipmentDTO.getEquipmentType());
+        }
+        if (equipmentDTO.getEquipmentStatus() != null) {
+            existingEquipment.setEquipmentStatus(equipmentDTO.getEquipmentStatus());
+        }
+        if (equipmentDTO.getFieldCode() != null) {
+            Field field = fieldDAO.findById(equipmentDTO.getFieldCode())
+                    .orElseThrow(() -> new FieldNotFoundException("Field not found with code: " + equipmentDTO.getFieldCode()));
+            existingEquipment.setField(field);
+        }
+        if (equipmentDTO.getId() != null) {
+            Staff staff = staffDAO.findById(equipmentDTO.getId())
+                    .orElseThrow(() -> new StaffMemberNotFoundException("Staff not found with ID: " + equipmentDTO.getId()));
+            existingEquipment.setStaff(staff);
+        }
+
+        equipmentDAO.save(existingEquipment);
     }
 
     @Override
