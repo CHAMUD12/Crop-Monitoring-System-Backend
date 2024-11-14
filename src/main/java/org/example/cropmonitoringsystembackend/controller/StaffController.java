@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.dto.impl.StaffDTO;
 import org.example.cropmonitoringsystembackend.exception.CropNotFoundException;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.VehicleNotFoundException;
 import org.example.cropmonitoringsystembackend.service.StaffService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,5 +57,21 @@ public class StaffController {
     public ResponseEntity<List<StaffDTO>> searchStaffMember(@RequestParam("searchTerm") String searchTerm) {
         List<StaffDTO> staffDTOS = staffService.searchStaff(searchTerm);
         return new ResponseEntity<>(staffDTOS, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateSelectedMember(
+            @PathVariable("id") String id,
+            @RequestBody StaffDTO staffDTO
+    ) {
+        try {
+            staffService.updateStaff(id, staffDTO);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (VehicleNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
