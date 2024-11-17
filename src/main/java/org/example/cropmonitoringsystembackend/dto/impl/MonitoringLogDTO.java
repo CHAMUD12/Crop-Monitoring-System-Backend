@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 public class MonitoringLogDTO implements SuperDTO, MonitoringLogResponse {
     private String log_code;
-    private Date log_date;
+    private String log_date;
     private String Observation;
     private String log_image;
     private String fieldCode;

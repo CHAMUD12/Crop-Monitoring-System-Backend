@@ -8,5 +8,5 @@ import java.util.Date;
 import java.util.List;
 @Repository
 public interface MonitoringLogDAO extends JpaRepository<MonitoringLog, String> {
-    List<MonitoringLog> findByMonitoringLogCodeOrMonitoringLogDate(String logCode, Date logDate);
+//    List<MonitoringLog> findByMonitoringLogCodeOrMonitoringLogDate(String logCode, Date logDate);
 }
