@@ -50,7 +50,8 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     @Override
     public List<MonitoringLogDTO> searchMonitoringLog(String searchTerm) {
-        return List.of();
+        List<MonitoringLog> logs = monitoringLogDAO.findByMonitoringLogCodeOrMonitoringLogDate(searchTerm, searchTerm);
+        return mapping.convertToMonitoringLogListDTO(logs);
     }
 
     @Override

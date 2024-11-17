@@ -59,4 +59,10 @@ public class MonitoringLogController {
     public List<MonitoringLogDTO> getAllMonitoringLogs() {
         return monitoringLogService.getAllMonitoringLog();
     }
+
+    @GetMapping()
+    public ResponseEntity<List<MonitoringLogDTO>> searchMonitoringLogs(@RequestParam("searchTerm") String searchTerm) {
+        List<MonitoringLogDTO> logs = monitoringLogService.searchMonitoringLog(searchTerm);
+        return new ResponseEntity<>(logs, HttpStatus.OK);
+    }
 }
