@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/monitoringLog")
@@ -53,5 +53,10 @@ public class MonitoringLogController {
             e.printStackTrace();
             return new ResponseEntity<>(new FieldErrorResponse(0, "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "allLogs", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MonitoringLogDTO> getAllMonitoringLogs() {
+        return monitoringLogService.getAllMonitoringLog();
     }
 }

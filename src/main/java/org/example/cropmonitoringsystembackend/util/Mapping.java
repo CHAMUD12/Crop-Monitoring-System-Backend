@@ -96,6 +96,13 @@ public class Mapping {
     }
 
     public List<MonitoringLogDTO> convertToMonitoringLogListDTO(List<MonitoringLog> monitoringLogs) {
-        return modelMapper.map(monitoringLogs, new TypeToken<List<MonitoringLogDTO>>() {}.getType());
+        return monitoringLogs.stream().map(log -> {
+            MonitoringLogDTO monitoringLogDTO = modelMapper.map(log, MonitoringLogDTO.class);
+            // Manually map nested properties
+            monitoringLogDTO.setFieldCode(log.getField().getFieldCode());
+            monitoringLogDTO.setCropCode(log.getCrop().getCropCode());
+            monitoringLogDTO.setId(log.getStaff().getId());
+            return monitoringLogDTO;
+        }).collect(Collectors.toList());
     }
 }

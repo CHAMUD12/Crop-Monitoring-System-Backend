@@ -55,7 +55,8 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     @Override
     public List<MonitoringLogDTO> getAllMonitoringLog() {
-        return List.of();
+        List<MonitoringLog> logs = monitoringLogDAO.findAll();
+        return mapping.convertToMonitoringLogListDTO(logs);
     }
 
     @Override
