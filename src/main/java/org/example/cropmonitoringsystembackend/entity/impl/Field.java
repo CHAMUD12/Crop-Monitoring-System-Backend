@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"crops", "assignments", "equipmentList"})
+@ToString(exclude = {"crops", "assignments", "equipmentList","monitoringLogList"})
 @Entity
 @Table(name = "fields")
 public class Field implements SuperEntity {
@@ -30,5 +30,6 @@ public class Field implements SuperEntity {
     private List<Equipment> equipmentList = new ArrayList<>();
     @OneToMany(mappedBy = "field", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FieldStaffAssignment> assignments = new ArrayList<>();
-
+    @OneToMany(mappedBy = "field")
+    private List<MonitoringLog> monitoringLogList = new ArrayList<>();
 }
