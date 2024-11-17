@@ -65,4 +65,35 @@ public class MonitoringLogController {
         List<MonitoringLogDTO> logs = monitoringLogService.searchMonitoringLog(searchTerm);
         return new ResponseEntity<>(logs, HttpStatus.OK);
     }
+
+    @PatchMapping(value = "/{logCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateMonitoringLog(
+            @PathVariable("logCode") String logCode,
+            @RequestParam(value = "logDate", required = false) String logDate,
+            @RequestParam(value = "observation", required = false) String observation,
+            @RequestParam(value = "logImage", required = false) MultipartFile logImage,
+            @RequestParam(value = "fieldCode", required = false) String fieldCode,
+            @RequestParam(value = "cropCode", required = false) String cropCode,
+            @RequestParam(value = "staffId", required = false) String id
+    ) {
+        try {
+            MonitoringLogDTO logDTO = new MonitoringLogDTO();
+
+            if (logDate != null) logDTO.setLog_date(logDate);
+            if (observation != null) logDTO.setObservation(observation);
+            if (logImage != null && !logImage.isEmpty()) {
+                logDTO.setLog_image(AppUtil.toBase64(logImage.getBytes()));
+            }
+            if (fieldCode != null) logDTO.setFieldCode(fieldCode);
+            if (cropCode != null) logDTO.setCropCode(cropCode);
+            if (id != null) logDTO.setId(id);
+
+            monitoringLogService.updateMonitoringLog(logCode, logDTO);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
