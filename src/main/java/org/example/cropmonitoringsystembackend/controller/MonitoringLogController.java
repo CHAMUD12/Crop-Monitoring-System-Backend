@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.cropmonitoringsystembackend.customObj.FieldErrorResponse;
 import org.example.cropmonitoringsystembackend.dto.impl.MonitoringLogDTO;
 import org.example.cropmonitoringsystembackend.exception.DataPersistException;
+import org.example.cropmonitoringsystembackend.exception.MonitoringLogNotFoundException;
 import org.example.cropmonitoringsystembackend.service.MonitoringLogService;
 import org.example.cropmonitoringsystembackend.util.AppUtil;
 import org.springframework.http.HttpStatus;
@@ -93,6 +94,18 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping(value = "/{logCode}")
+    public ResponseEntity<Void> deleteMonitoringLog(@PathVariable("logCode") String logCode) {
+        try {
+            monitoringLogService.deleteMonitoringLog(logCode);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (MonitoringLogNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

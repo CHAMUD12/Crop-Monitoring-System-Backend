@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -62,7 +63,12 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     @Override
     public void deleteMonitoringLog(String log_code) {
-
+        Optional<MonitoringLog> selectedLog = monitoringLogDAO.findById(log_code);
+        if (!selectedLog.isPresent()) {
+            throw new MonitoringLogNotFoundException(log_code);
+        } else {
+            monitoringLogDAO.deleteById(log_code);
+        }
     }
 
     @Override
