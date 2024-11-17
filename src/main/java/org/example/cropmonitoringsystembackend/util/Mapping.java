@@ -85,4 +85,17 @@ public class Mapping {
             return equipmentDTO;
         }).collect(Collectors.toList());
     }
+
+    //MonitoringLog mappings
+    public MonitoringLogDTO convertToMonitoringLogDTO(MonitoringLog monitoringLog) {
+        return modelMapper.map(monitoringLog, MonitoringLogDTO.class);
+    }
+
+    public MonitoringLog convertToMonitoringLog(MonitoringLogDTO monitoringLogDTO) {
+        return modelMapper.map(monitoringLogDTO, MonitoringLog.class);
+    }
+
+    public List<MonitoringLogDTO> convertToMonitoringLogListDTO(List<MonitoringLog> monitoringLogs) {
+        return modelMapper.map(monitoringLogs, new TypeToken<List<MonitoringLogDTO>>() {}.getType());
+    }
 }
