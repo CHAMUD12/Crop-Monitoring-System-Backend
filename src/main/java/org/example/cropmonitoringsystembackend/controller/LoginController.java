@@ -22,5 +22,12 @@ public class LoginController {
         return ResponseEntity.ok(
                 authenticationService.signIn(signInRequest));
     }
+
+    @PostMapping("/signup")
+    public ResponseEntity<JWTAuthResponse> signUp(
+            @RequestBody SignUpRequest signUpRequest){
+        return ResponseEntity.ok(
+                authenticationService.signUp(signUpRequest));
+    }
 }
 
