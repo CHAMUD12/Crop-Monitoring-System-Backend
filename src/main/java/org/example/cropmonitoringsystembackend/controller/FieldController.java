@@ -13,6 +13,7 @@ import org.example.cropmonitoringsystembackend.util.AppUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class FieldController {
     private final FieldService fieldService;
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'SCIENTIST')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FieldErrorResponse> saveField(@RequestParam("fieldCode") String fieldCode, @RequestParam("fieldName") String fieldName, @RequestParam("fieldLocation") String fieldLocation, @RequestParam("extentSize") Double extentSize, @RequestParam("fieldImage1") MultipartFile fieldImage1, @RequestParam("fieldImage2") MultipartFile fieldImage2, HttpServletRequest request // Add this to log the request content type
 
@@ -84,6 +86,7 @@ public class FieldController {
         return new ResponseEntity<>(fields, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'SCIENTIST')")
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/{fieldCode}")
     public ResponseEntity<Void> updateSelectedField(@PathVariable("fieldCode") String fieldCode, @RequestParam(value = "fieldName", required = false) String fieldName, @RequestParam(value = "fieldLocation", required = false) String fieldLocation, @RequestParam(value = "extentSize", required = false) Double extentSize, @RequestParam(value = "fieldImage1", required = false) MultipartFile fieldImage1, @RequestParam(value = "fieldImage2", required = false) MultipartFile fieldImage2) {
         try {
@@ -108,6 +111,7 @@ public class FieldController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'SCIENTIST')")
     @DeleteMapping(value = "/{code}")
     public ResponseEntity<Void> deleteSelectedField(@PathVariable("code") String code) {
         try {
