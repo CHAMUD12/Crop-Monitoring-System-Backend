@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -47,11 +46,6 @@ public class JWTServiceIMPL implements JWTService {
         return subject.equals(userDetails.getUsername()) && !isExpired(token);
     }
 
-    @Override
-    public String refreshToken(UserDetails userDetails) {
-        return refreshToken(new HashMap<>(), userDetails);
-    }
-
     private Key getSignKey() {
         byte[] bytes = Decoders.BASE64.decode(jwtKey); //decode the base64-encoded jwt
         return Keys.hmacShaKeyFor(bytes); // generate an HMAC (Hash-based Message Authentication Code) signing key
@@ -69,15 +63,6 @@ public class JWTServiceIMPL implements JWTService {
     private boolean isExpired(String token) {
         Date expiredDate = extractClaims(token, Claims::getExpiration);
         return expiredDate.before(new Date());
-    }
-
-    private String refreshToken(Map<String, Object> extractClaims, UserDetails userDetails) {
-        extractClaims.put("role", userDetails.getAuthorities());
-        Date now = new Date();
-        Date expire = new Date(now.getTime() + 1000 * 600);
-        Date refreshExpire = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 1); // one day
-
-        return Jwts.builder().setClaims(extractClaims).setSubject(userDetails.getUsername()).setExpiration(refreshExpire).signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 }
 
