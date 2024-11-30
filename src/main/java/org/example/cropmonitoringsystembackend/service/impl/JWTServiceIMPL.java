@@ -40,11 +40,22 @@ public class JWTServiceIMPL implements JWTService {
         return accessToken;
     }
 
-    @Override
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+//    @Override
+//    public boolean isTokenValid(String token, UserDetails userDetails) {
+//        String subject = extractClaims(token, Claims::getSubject);
+//        return subject.equals(userDetails.getUsername()) && !isExpired(token);
+//    }
+@Override
+public boolean isTokenValid(String token, UserDetails userDetails) {
+    try {
         String subject = extractClaims(token, Claims::getSubject);
         return subject.equals(userDetails.getUsername()) && !isExpired(token);
+    } catch (io.jsonwebtoken.ExpiredJwtException e) {
+        // Token is expired
+        return false;
     }
+}
+
 
     private Key getSignKey() {
         byte[] bytes = Decoders.BASE64.decode(jwtKey); //decode the base64-encoded jwt
