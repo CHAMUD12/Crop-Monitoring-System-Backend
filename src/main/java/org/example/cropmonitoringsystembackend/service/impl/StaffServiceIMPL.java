@@ -26,25 +26,11 @@ public class StaffServiceIMPL implements StaffService {
     private final VehicleDAO vehicleDAO;
     private final Mapping mapping;
 
-//    @Override
-//    public void saveStaff(StaffDTO staffDTO) {
-//        Vehicle vehicle = vehicleDAO.findById(staffDTO.getVehicleCode())
-//                .orElseThrow(() -> new DataPersistException("Invalid Vehicle code"));
-//        Staff staff = mapping.convertToStaff(staffDTO);
-//        staff.setVehicle(vehicle);
-//        Staff savedStaff = staffDAO.save(staff);
-//        try {
-//            if (savedStaff == null) {
-//                throw new DataPersistException("Can't save Staff");
-//            }
-//        } catch (DataPersistException e) {
-//            e.printStackTrace();
-//        }
-//    }
+@Override
+public void saveStaff(StaffDTO staffDTO) {
+    Staff staff = mapping.convertToStaff(staffDTO);
 
-
-    @Override
-    public void saveStaff(StaffDTO staffDTO) {
+    if (!"not-allocated".equalsIgnoreCase(staffDTO.getVehicleCode())) {
         Vehicle vehicle = vehicleDAO.findById(staffDTO.getVehicleCode())
                 .orElseThrow(() -> new DataPersistException("Invalid Vehicle code"));
 
@@ -52,18 +38,18 @@ public class StaffServiceIMPL implements StaffService {
             throw new DataPersistException("The selected vehicle is not available");
         }
 
-        Staff staff = mapping.convertToStaff(staffDTO);
         staff.setVehicle(vehicle);
-
-        Staff savedStaff = staffDAO.save(staff);
-        if (savedStaff == null) {
-            throw new DataPersistException("Can't save Staff");
-        }
-
         vehicle.setStatus("out of service");
         vehicleDAO.save(vehicle);
+    } else {
+        staff.setVehicle(null); // No vehicle assigned
     }
 
+    Staff savedStaff = staffDAO.save(staff);
+    if (savedStaff == null) {
+        throw new DataPersistException("Can't save Staff");
+    }
+}
     @Override
     public List<StaffDTO> getAllStaffs() {
         List<Staff> getAllStaff = staffDAO.findAll();
