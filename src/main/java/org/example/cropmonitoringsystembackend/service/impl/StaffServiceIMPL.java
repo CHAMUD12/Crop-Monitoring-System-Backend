@@ -112,12 +112,24 @@ public void saveStaff(StaffDTO staffDTO) {
         if (staffDTO.getEmail() != null) {
             existingStaff.setEmail(staffDTO.getEmail());
         }
+
         if (staffDTO.getVehicleCode() != null) {
             Vehicle vehicle = vehicleDAO.findById(staffDTO.getVehicleCode())
-                    .orElseThrow(() -> new VehicleNotFoundException("Vehicle not found with code: " + staffDTO.getVehicleCode()));
+                    .orElseThrow(() -> new DataPersistException("Invalid Vehicle code"));
+
+            // Update the vehicle status
+            vehicle.setStatus("out of service");
+            vehicleDAO.save(vehicle);
             existingStaff.setVehicle(vehicle);
+        } else {
+            // Handle "Not Allocated" case
+            if (existingStaff.getVehicle() != null) {
+                Vehicle currentVehicle = existingStaff.getVehicle();
+                currentVehicle.setStatus("available");
+                vehicleDAO.save(currentVehicle);
+                existingStaff.setVehicle(null);
+            }
         }
-        staffDAO.save(existingStaff);
     }
 
     @Override
