@@ -9,8 +9,11 @@ import org.example.cropmonitoringsystembackend.entity.impl.Field;
 import org.example.cropmonitoringsystembackend.entity.impl.FieldStaffAssignment;
 import org.example.cropmonitoringsystembackend.entity.impl.Staff;
 import org.example.cropmonitoringsystembackend.service.FieldAssignmentStaffService;
+import org.example.cropmonitoringsystembackend.util.Mapping;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -19,6 +22,7 @@ public class FieldAssignmentStaffServiceIMPL implements FieldAssignmentStaffServ
     private final FieldStaffAssignmentDAO fieldStaffAssignmentDAO;
     private final FieldDAO fieldDAO;
     private final StaffDAO staffDAO;
+    private final Mapping mapping;
 
     @Override
     public void saveAssignment(FieldStaffAssignmentDTO fieldStaffAssignmentDTO) {
@@ -34,4 +38,11 @@ public class FieldAssignmentStaffServiceIMPL implements FieldAssignmentStaffServ
         fieldStaffAssignment.setAssignmentDate(fieldStaffAssignmentDTO.getAssignmentDate());
 
         fieldStaffAssignmentDAO.save(fieldStaffAssignment);
-    }}
+    }
+
+    @Override
+    public List<FieldStaffAssignmentDTO> getAllFieldStaffAssignments() {
+        List<FieldStaffAssignment> logs = fieldStaffAssignmentDAO.findAll();
+        return mapping.convertToFieldStaffAssignmentDTOList(logs);
+    }
+}
