@@ -98,7 +98,7 @@ The system follows a Layered Architecture:
 1. Clone the repository:
    ```bash
    https://github.com/CHAMUD12/Crop-Monitoring-System-Backend.git
-   cd CropMonitoringSystem-Backend
+   cd Crop-Monitoring-System-Backend
    
 2. Database Setup:
    Create a MySQL database:
