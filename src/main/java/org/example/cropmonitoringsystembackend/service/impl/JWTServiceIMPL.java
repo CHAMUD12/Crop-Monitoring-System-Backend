@@ -40,11 +40,6 @@ public class JWTServiceIMPL implements JWTService {
         return accessToken;
     }
 
-//    @Override
-//    public boolean isTokenValid(String token, UserDetails userDetails) {
-//        String subject = extractClaims(token, Claims::getSubject);
-//        return subject.equals(userDetails.getUsername()) && !isExpired(token);
-//    }
 @Override
 public boolean isTokenValid(String token, UserDetails userDetails) {
     try {
