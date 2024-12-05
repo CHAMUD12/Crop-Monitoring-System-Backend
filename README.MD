@@ -121,6 +121,8 @@ The system follows a Layered Architecture:
    mvn clean install
    mvn spring-boot:run
 
+5. Fronted (if you want)
+    https://github.com/CHAMUD12/Crop-Monitoring-System-Frontend.git
 
 ---
 
